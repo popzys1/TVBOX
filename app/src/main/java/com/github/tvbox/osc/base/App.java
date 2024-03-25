@@ -1,18 +1,31 @@
 package com.github.tvbox.osc.base;
 
+<<<<<<< HEAD
 import android.os.Environment;
 
+=======
+import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
+
+import androidx.multidex.MultiDex;
+>>>>>>> parent of a63f6f8 (修复web嗅探解析错误)
 import androidx.multidex.MultiDexApplication;
 
 import com.github.catvod.crawler.JarLoader;
 import com.github.catvod.crawler.JsLoader;
+<<<<<<< HEAD
 import com.github.tvbox.osc.R;
+=======
+import com.github.tvbox.osc.BuildConfig;
+>>>>>>> parent of a63f6f8 (修复web嗅探解析错误)
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
 import com.github.tvbox.osc.data.AppDataManager;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FileUtils;
+import com.github.tvbox.osc.util.FixDexUtils;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.LocaleHelper;
 import com.github.tvbox.osc.util.LOG;
@@ -22,14 +35,25 @@ import com.github.tvbox.osc.util.SubtitleHelper;
 import com.hjq.permissions.XXPermissions;
 import com.kingja.loadsir.core.LoadSir;
 import com.orhanobut.hawk.Hawk;
+
 import com.p2p.P2PClass;
 import com.whl.quickjs.android.QuickJSLoader;
+<<<<<<< HEAD
 
 import java.io.File;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
+=======
+import org.conscrypt.Conscrypt;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.Provider;
+import java.security.Security;
+
+>>>>>>> parent of a63f6f8 (修复web嗅探解析错误)
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.unit.Subunits;
 
@@ -43,9 +67,13 @@ public class App extends MultiDexApplication {
     private static P2PClass p;
     public static String burl;
     private static String dashData;
+<<<<<<< HEAD
     public static ViewPump viewPump = null;
 
 
+=======
+    public static Provider conscrypt = Conscrypt.newProvider();
+>>>>>>> parent of a63f6f8 (修复web嗅探解析错误)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -84,6 +112,7 @@ public class App extends MultiDexApplication {
 
         // Add JS support
         QuickJSLoader.init();
+<<<<<<< HEAD
 
         // add font support, my tv embed font not include emoji
         String extStorageDir = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -97,6 +126,12 @@ public class App extends MultiDexApplication {
                                     .build()))
                     .build();
         }
+=======
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            Security.insertProviderAt(conscrypt, 1);
+        }
+
+>>>>>>> parent of a63f6f8 (修复web嗅探解析错误)
     }
 
     public static P2PClass getp2p() {
@@ -160,6 +195,24 @@ public class App extends MultiDexApplication {
     public void onTerminate() {
         super.onTerminate();
         JsLoader.load();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        MultiDex.install(base);
+
+        //okhttp的改动见OkHttpClientReplace.java的public OkHttpClientReplace build()
+        //用于替换spider jar里的Builder.build()以让android 9及以下系统支持 tls 1.3
+        try {
+            Uri uri = Uri.parse("android.resource://"+ BuildConfig.APPLICATION_ID+"/raw/okhttp_inject.dex");
+            FixDexUtils.copy(base, new FileInputStream(uri.getPath()));
+        } catch (IOException e) {
+        }
+        // 每次启动应用都先进行修复包加载操作
+        FixDexUtils.loadDex(base);
+
+        super.attachBaseContext(base);
+
     }
 
     public void setDashData(String data) {

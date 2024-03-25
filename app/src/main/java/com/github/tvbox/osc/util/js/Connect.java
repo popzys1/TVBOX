@@ -28,11 +28,15 @@ import okhttp3.Response;
 
 public class Connect {
     static OkHttpClient client;
-    
+
     public static Call to(String url, Req req) {
-        OkHttpClient client = OkHttp.client(req.isRedirect(), req.getTimeout());
+        client = req.getRedirect() == 1 ? OkHttp.client() : OkHttp.noRedirect();
+        client = client.newBuilder()
+                .connectTimeout(req.getTimeout(), TimeUnit.MILLISECONDS)
+                .readTimeout(req.getTimeout(), TimeUnit.MILLISECONDS)
+                .writeTimeout(req.getTimeout(), TimeUnit.MILLISECONDS).build();
         return client.newCall(getRequest(url, req, Headers.of(req.getHeader())));
-    }    
+    }
 
     public static JSObject success(QuickJSContext ctx, Req req, Response res) {
         try {

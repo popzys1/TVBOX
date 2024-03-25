@@ -65,10 +65,6 @@ public class Req {
     private JsonElement getHeaders() {
         return headers;
     }
-    
-    public boolean isRedirect() {
-        return getRedirect() == 1;
-    }
 
     public Map<String, String> getHeader() {
         return Json.toMap(getHeaders());
