@@ -1,4 +1,4 @@
-package com.github.tvbox.util.js;
+package com.tvbox.util.js;
 
 import com.whl.quickjs.wrapper.JSCallFunction;
 import com.whl.quickjs.wrapper.JSFunction;
