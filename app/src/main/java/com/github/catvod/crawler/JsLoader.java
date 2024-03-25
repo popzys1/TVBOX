@@ -6,7 +6,8 @@ import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.util.LOG;
 import com.github.tvbox.osc.util.MD5;
 
-import com.github.tvbox.osc.util.js.JsSpider;
+//import com.github.tvbox.osc.util.js.JsSpider;
+import com.tvbox.util.js.JsSpider;
 import com.lzy.okgo.OkGo;
 
 import java.io.File;
