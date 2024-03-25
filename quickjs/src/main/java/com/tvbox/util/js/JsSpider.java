@@ -1,4 +1,4 @@
-package com.github.tvbox.osc.util.js;
+package com.tvbox.util.js;
 
 import android.content.Context;
 import android.text.TextUtils;
