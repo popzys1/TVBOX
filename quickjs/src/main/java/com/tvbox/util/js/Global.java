@@ -1,4 +1,4 @@
-package com.github.tvbox.osc.util.js;
+package com.tvbox.util.js;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
