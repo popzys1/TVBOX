@@ -1,4 +1,4 @@
-package com.github.tvbox.util.js;
+package com.tvbox.util.js;
 
 import android.util.Base64;
 
